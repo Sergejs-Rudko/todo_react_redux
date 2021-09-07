@@ -1,17 +1,30 @@
 import React from "react";
-
+import {FilterValueTypes} from "./App";
+//TYPES START
 type PropsType = {
-    title : string
-    tasks : Array<TaskType>
+    title: string
+    tasks: Array<TaskType>
+    removeTask: (taskID: number) => void
+    changeFilter: (filter: FilterValueTypes) => void
 }
 
 export type TaskType = {
-    id : number
-    isDone : boolean
-    taskTitle : string
+    id: number
+    isDone: boolean
+    taskTitle: string
 }
 
-export function Todolist(props : PropsType) {
+//TYPES END
+
+export function Todolist(props: PropsType) {
+
+    //CLICK HANDLERS START
+    const onDeleteButtonClickHandler = (taskID: number) => props.removeTask(taskID)
+    const onFilterAllButtonClick = () => props.changeFilter("all")
+    const onFilterActiveButtonClick = () => props.changeFilter("active")
+    const onFilterCompletedButtonClick = () => props.changeFilter("completed")
+    //CLICK HANDLERS END
+
     return (
         <div>
             <h3>{props.title}</h3>
@@ -20,14 +33,16 @@ export function Todolist(props : PropsType) {
                 <button>+</button>
             </div>
             <ul>
-                <li><input type={"checkbox"} checked={props.tasks[0].isDone}/> <span>{props.tasks[0].taskTitle}</span></li>
-                <li><input type={"checkbox"} checked={props.tasks[1].isDone}/> <span>{props.tasks[1].taskTitle}</span></li>
-                <li><input type={"checkbox"} checked={props.tasks[2].isDone}/> <span>{props.tasks[2].taskTitle}</span></li>
+                {props.tasks.map(task =>
+                    <li key={task.id}><input type={"checkbox"} checked={task.isDone}/><span>{task.taskTitle}</span>
+                        <button onClick={() => onDeleteButtonClickHandler(task.id)}>x</button>
+                    </li>
+                )}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Complete</button>
+                <button onClick={() => onFilterAllButtonClick()}>All</button>
+                <button onClick={() => onFilterActiveButtonClick()}>Active</button>
+                <button onClick={() => onFilterCompletedButtonClick()}>Complete</button>
             </div>
         </div>
     )
