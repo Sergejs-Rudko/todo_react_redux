@@ -36,6 +36,14 @@ export function App() {
         setFilter(filterValue)
     }
 
+    function changeTaskStatus(taskID: string, isDone: boolean) {
+        let task = tasks.find(task => task.id === taskID)
+        if (task) {
+            task.isDone = isDone
+        }
+        setTasks([ ...tasks])
+    }
+
     //FUNCTIONS END
 
 
@@ -53,7 +61,9 @@ export function App() {
                       tasks={tasksForTodolist}
                       removeTask={removeTask}
                       changeFilter={changeFilter}
-                      addTask={addTask}/>
+                      addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
+            filter={filter}/>
         </div>
     )
 }
