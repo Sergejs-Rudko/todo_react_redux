@@ -1,10 +1,10 @@
 import {v1} from "uuid";
 import {TodolistType} from "../App";
 import {
-    AddTodolistAC,
-    ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
-    RemoveTodolistAC,
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    removeTodolistAC,
     todolistReducer
 } from "./todolistReducer";
 
@@ -17,7 +17,7 @@ test("correct todolist should be removed", ()=> {
         {id : todolistID2, title : "What to buy",filter : "all"},
     ]
 
-    let action = RemoveTodolistAC(todolistID1)
+    let action = removeTodolistAC(todolistID1)
 
     const endState = todolistReducer(startState, action)
 
@@ -35,7 +35,7 @@ test("New todolist should be added correctly", () => {
         {id : todolistID2, title : "What to buy",filter : "all"},
     ]
 
-    let action = AddTodolistAC("TEST")
+    let action = addTodolistAC("TEST")
 
     let endState = todolistReducer(startState, action)
 
@@ -53,7 +53,7 @@ test("Todolist title should be changed correctly", () => {
         {id : todolistID2, title : "What to buy",filter : "all"},
     ]
 
-    let action = ChangeTodolistTitleAC("HAHA", todolistID1)
+    let action = changeTodolistTitleAC("HAHA", todolistID1)
 
     let endState = todolistReducer(startState, action)
 
@@ -71,7 +71,7 @@ test("Todolist filter changing to be correct", () => {
         {id : todolistID2, title : "What to buy",filter : "all"},
     ]
 
-    let action = ChangeTodolistFilterAC("active",todolistID1)
+    let action = changeTodolistFilterAC("active",todolistID1)
 
     let endState = todolistReducer(startState, action)
 
