@@ -9,7 +9,7 @@ export let removeTodolistAC = (todolistID: string) => ({
 export let addTodolistAC = (title: string) => ({
     type: "ADD-TODOLIST",
     title: title,
-    todolistID : v1()
+    todolistID: v1()
 }) as const
 
 export let changeTodolistTitleAC = (newTitle: string, todolistID: string) => ({
@@ -34,7 +34,15 @@ export type unionActionType_TODOLIST_REDUCER = RemoveTodolistType |
     ChangeTodolistTitleType |
     ChangeTodolistFilterType
 
-export const todolistReducer = (state: Array<TodolistType>, action: unionActionType_TODOLIST_REDUCER) => {
+
+export let todolistID1 = v1()
+export let todolistID2 = v1()
+const initialState: Array<TodolistType> = [
+   /* {id: todolistID1, title: "What to learn", filter: "all"},
+    {id: todolistID2, title: "What to buy", filter: "all"}*/
+]
+
+export const todolistReducer = (state: Array<TodolistType> = initialState, action: unionActionType_TODOLIST_REDUCER) => {
     switch (action.type) {
         case "REMOVE-TODOLIST": {
             let copy = [...state]
@@ -43,7 +51,7 @@ export const todolistReducer = (state: Array<TodolistType>, action: unionActionT
         }
         case "ADD-TODOLIST": {
             let newTodolist: TodolistType = {id: action.todolistID, title: action.title, filter: "all"}
-            return [...state, newTodolist]
+            return [newTodolist, ...state]
         }
         case "CHANGE-TODOLIST-TITLE": {
             let copy = [...state]
@@ -62,6 +70,6 @@ export const todolistReducer = (state: Array<TodolistType>, action: unionActionT
             return [...copy]
         }
         default :
-            throw new Error("I dont understand")
+            return state
     }
 }

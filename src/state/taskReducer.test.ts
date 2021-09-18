@@ -1,6 +1,6 @@
 import {TaskStateType} from "../App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "./taskReducer";
-import {addTodolistAC} from "./todolistReducer";
+import {addTodolistAC, removeTodolistAC, todolistReducer} from "./todolistReducer";
 
 test("taskReducer // correct task should be deleted from correct array ", () => {
     const startState: TaskStateType = {
@@ -116,22 +116,4 @@ test("taskReducer // should add empty array of task fro new todolist", () => {
 
 })
 
-
-test("taskReducer // tasks should be deleted after todolist is deleted", () => {
-    const startState: TaskStateType = {
-        "todolistID1": [
-            {id: "1", taskTitle: "CSS", isDone: true},
-            {id: "2", taskTitle: "JS", isDone: false},
-            {id: "3", taskTitle: "React", isDone: false},
-        ],
-        "todolistID2": [
-            {id: "1", taskTitle: "Bread", isDone: false},
-            {id: "2", taskTitle: "Milk", isDone: false},
-            {id: "3", taskTitle: "Chocolate", isDone: false},
-            {id: "4", taskTitle: "Cheese", isDone: false},
-        ]
-    }
-
-
-})
 

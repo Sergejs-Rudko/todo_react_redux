@@ -4,6 +4,7 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete"
+
 //TYPES START
 type PropsType = {
     title: string
@@ -28,6 +29,7 @@ export type TaskType = {
 //TYPES END
 
 export function Todolist(props: PropsType) {
+
 
     //CLICK HANDLERS START
     //const onDeleteButtonClickHandler = (taskID: string) => props.removeTask(taskID)
