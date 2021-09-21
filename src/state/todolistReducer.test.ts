@@ -40,7 +40,7 @@ test("New todolist should be added correctly", () => {
     let endState = todolistReducer(startState, action)
 
     expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe("TEST")
+    expect(endState[0].title).toBe("TEST")
     expect(endState[2].filter).toBe("all")
 })
 
