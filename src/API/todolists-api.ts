@@ -7,7 +7,7 @@ export enum TaskStatuses {
     Draft,
 }
 
-export enum TodoTaskPriorities{
+export enum TodoTaskPriorities {
     Low,
     Middle,
     High,
@@ -15,6 +15,14 @@ export enum TodoTaskPriorities{
     Later,
 }
 
+export type UpdateTaskModelType = {
+    title: string
+    description: string
+    status: TaskStatuses
+    priority: TodoTaskPriorities
+    startDate: string
+    deadline: string
+}
 const settings = {
     withCredentials: true,
     headers: {
@@ -59,7 +67,6 @@ type GetTasksResponseType = {
 }
 
 
-
 export type UpdateTaskType = {
     addedDate: string//"2021-09-25T09:34:17.1878986Z"
     deadline: string | null
@@ -71,7 +78,6 @@ export type UpdateTaskType = {
     status: number
     title: string
     todoListId: string //"9792d1f6-5bf0-4a28-8d58-2a2a919d8435"
-
 }
 
 
@@ -95,21 +101,10 @@ export const todolistsAPI = {
         return instance.delete<ResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`)
     },
     createTask(todolistID: string, taskTitle: string) {
-        return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistID}/tasks`, {title: taskTitle})
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistID}/tasks`, {title: taskTitle})
     },
-    updateTask(todolistID: string, taskID: string, newTitle: string) {
-        return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistID}/tasks/${taskID}`, {
-            addedDate: "2021-09-25T10:02:26.467",
-            deadline: null,
-            description: null,
-            id: taskID,
-            order: -1,
-            priority: 1,
-            startDate: null,
-            status: 0,
-            title: newTitle,
-            todoListId: todolistID //"9792d1f6-5bf0-4a28-8d58-2a2a919d8435"
-        })
+    updateTask(todolistID: string, taskID: string, model: UpdateTaskModelType) {
+        return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistID}/tasks/${taskID}`, model)
     }
     //41749e59-7b72-48b8-9dfa-a7e807156f51
 }

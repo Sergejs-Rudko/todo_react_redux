@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from "react";
 
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
+import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../Components/editableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete"
-import {TaskComponent} from "./TaskComponent";
-import {TaskStatuses, TaskType} from "./API/todolists-api";
-import {FilterValueTypes} from "./state/todolistReducer";
+import {TaskComponent} from "../Task/TaskComponent";
+import {TaskStatuses, TaskType} from "../../API/todolists-api";
+import {FilterValueTypes} from "../../state/todolistReducer";
 import {useDispatch} from "react-redux";
-import {fetchTasksTC} from "./state/taskReducer";
+import {fetchTasksTC} from "../../state/taskReducer";
 
 //TYPES START
 type PropsType = {
@@ -37,9 +37,9 @@ export const Todolist = React.memo(function (props: PropsType) {
     const dispatch = useDispatch()
     console.log("Todolist is called")
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchTasksTC(props.todolistID))
-    },[])
+    }, [dispatch])
 
     //CLICK HANDLERS START
     //const onDeleteButtonClickHandler = (taskID: string) => props.removeTask(taskID)

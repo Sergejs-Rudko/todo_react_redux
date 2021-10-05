@@ -1,37 +1,30 @@
-import React, {useReducer} from "react";
+import React, {useState} from "react";
 import "./App.css"
-import {Todolist} from "./Todolist";
+import {Todolist} from "../features/Todolist/Todolist";
 import {v1} from "uuid";
-import {AddItemForm} from "./AddItemForm";
-import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from "@material-ui/core";
+import {AddItemForm} from "../Components/AddItemForm/AddItemForm";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC,
-    removeTodolistAC,
-    todolistReducer
-} from "./state/todolistReducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "./state/taskReducer";
-import {TaskStatuses, TaskType, TodoTaskPriorities} from "./API/todolists-api";
+import {TaskStatuses, TaskType, TodoTaskPriorities} from "../API/todolists-api";
+import {FilterValueTypes, TodolistDomainType} from "../state/todolistReducer";
 
-export type FilterValueTypes = "all" | "active" | "completed"
-export type TodolistType = {
+
+/*export type TodolistType = { DELETE LATER
     id: string
     title: string
     filter: FilterValueTypes
-}
+}*/
 
 export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
-export function AppWithReducers() {
+export function App() {
     let todolistID1 = v1()
     let todolistID2 = v1()
 
     //STATES START
-    let [tasksObj, dispatchToTasksReducer] = useReducer(taskReducer, {
+    let [tasksObj, setTasks] = useState<TaskStateType>({
         [todolistID1]: [
             {
                 description: "string",
@@ -49,7 +42,7 @@ export function AppWithReducers() {
         [todolistID2]: [
             {
                 description: "string",
-                title: "HTML",
+                title: "CSS",
                 status: TaskStatuses.Completed,
                 priority: TodoTaskPriorities.Low,
                 startDate: "",
@@ -62,54 +55,81 @@ export function AppWithReducers() {
         ]
     })
 
-    let [todolists, dispatchToTodolistsReducer] = useReducer(todolistReducer, [
-        {id: todolistID1, title: "What to learn", filter: "all", addedDate : "", order : 1},
-        {id: todolistID2, title: "What to buy", filter: "all",addedDate : "", order : 2}
+    let [todolists, setTodolists] = useState<Array<TodolistDomainType>>([
+        {id: todolistID1, title: "What to learn", filter: "all", addedDate: "", order: 0},
+        {id: todolistID2, title: "What to buy", filter: "all", addedDate: "", order: 0}
     ])
     //STATES END
 
     //FUNCTIONS START
     function removeTask(taskID: string, todolistID: string) {
-        let action = removeTaskAC(todolistID, taskID)
-        dispatchToTasksReducer(action)
+        let filteredTasks = tasksObj[todolistID].filter(task => task.id !== taskID)
+        tasksObj[todolistID] = filteredTasks
+        setTasks({...tasksObj})
     }
 
     function addTask(taskTitle: string, todolistID: string) {
-        let action = addTaskAC(todolistID, taskTitle)
-        dispatchToTasksReducer(action)
+        let newTask: TaskType = {
+            description: "string",
+            title: taskTitle,
+            status: TaskStatuses.New,
+            priority: TodoTaskPriorities.Low,
+            startDate: "",
+            deadline: "",
+            id: v1(),
+            todoListId: todolistID,
+            order: 1,
+            addedDate: ""
+        }
+        let tasks = tasksObj[todolistID]
+        let newTasks = [newTask, ...tasks]
+        tasksObj[todolistID] = newTasks
+        setTasks({...tasksObj})
     }
 
     function changeFilter(filterValue: FilterValueTypes, todolistID: string) {
-        let action = changeTodolistFilterAC(filterValue, todolistID)
-        dispatchToTodolistsReducer(action)
-
+        let todolist = todolists.find(todolist => todolist.id === todolistID)
+        if (todolist) {
+            todolist.filter = filterValue
+            setTodolists([...todolists])
+        }
     }
 
-    function changeTaskStatus(taskID: string, status : TaskStatuses, todolistID: string) {
-        let action = changeTaskStatusAC(todolistID, taskID, status)
-        dispatchToTasksReducer(action)
+    function changeTaskStatus(taskID: string, status: TaskStatuses, todolistID: string) {
+        let task = tasksObj[todolistID].find(task => task.id === taskID)
+        if (task) {
+            task.status = status
+            setTasks({...tasksObj})
+        }
     }
 
     function removeTodolist(todolistID: string) {
-        let action = removeTodolistAC(todolistID)
-        dispatchToTodolistsReducer(action)
-        dispatchToTasksReducer(action)
+        let filteredTodolists = todolists.filter(todolist => todolist.id !== todolistID)
+        setTodolists(filteredTodolists)
+        delete tasksObj[todolistID]
+        setTasks({...tasksObj})
     }
 
     function addTodolist(title: string) {
-        let action = addTodolistAC(title)
-        dispatchToTodolistsReducer(action)
-        dispatchToTasksReducer(action)
+        let todolist: TodolistDomainType = {id: v1(), title: title, filter: "all", addedDate: "", order: 1}
+        setTodolists([todolist, ...todolists])
+        setTasks({...tasksObj, [todolist.id]: []})
     }
 
     function onChangeTaskTitleHandler(newTitle: string, todolistID: string, taskID: string) {
-        let action = changeTaskTitleAC(todolistID, taskID, newTitle)
-        dispatchToTasksReducer(action)
+        let task = tasksObj[todolistID].find(t => t.id === taskID)
+        if (task) {
+            task.title = newTitle
+            setTasks({...tasksObj})
+        }
     }
 
     function changeTodolistTitle(newTitle: string, todolistID: string) {
-        let action = changeTodolistTitleAC(newTitle, todolistID)
-        dispatchToTodolistsReducer(action)
+        let todolist = todolists.find(tl => tl.id === todolistID)
+        if (todolist) {
+            todolist.title = newTitle
+            setTodolists([...todolists])
+        }
     }
 
     //FUNCTIONS END

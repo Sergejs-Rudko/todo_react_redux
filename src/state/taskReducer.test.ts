@@ -1,6 +1,6 @@
-import {TaskStateType} from "../App";
+import {TaskStateType} from "../app/App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC, taskReducer} from "./taskReducer";
-import {addTodolistAC, setTodolistsAC} from "./todolistReducer";
+import { setTodolistsAC} from "./todolistReducer";
 import {TaskStatuses} from "../API/todolists-api";
 
 test("taskReducer // correct task should be deleted from correct array ", () => {
@@ -408,117 +408,16 @@ test("taskReducer // task should change it's title correctly", () => {
     expect(endState["todolistID1"][1].title).toBe("JS")
 })
 
-test("taskReducer // should add empty array of task fro new todolist", () => {
-    const startState: TaskStateType = {
-        "todolistID1": [
-            {
-                id: "1",
-                title: "CSS",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID1"
-            },
-            {
-                id: "2",
-                title: "HTML",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID1"
-            },
-            {
-                id: "3",
-                title: "React",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID1"
-            },
 
-
-        ],
-        "todolistID2": [
-            {
-                id: "1",
-                title: "Bread",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID2"
-            },
-            {
-                id: "2",
-                title: "Milk",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID2"
-            },
-            {
-                id: "3",
-                title: "Chocolate",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID2"
-            },
-            {
-                id: "4",
-                title: "Cheese",
-                status: TaskStatuses.New,
-                addedDate: "",
-                order: 1,
-                startDate: "",
-                description: "",
-                deadline: "",
-                priority: 1,
-                todoListId: "todolistID2"
-            },
-        ]
-    }
-
-    let action = addTodolistAC("yo")
-    let endState = taskReducer(startState, action)
-
-
-    const keys = Object.keys(endState)
-    expect(keys.length).toBe(3)
-
-})
 
 
 test("empty arrays should be added when todolists are settled", () => {
     let action = setTodolistsAC([
-        {id : "1", title : "First todolist", order : 1 , addedDate : ""},
-        {id : "2", title : "Second todolist", order : 2 , addedDate : ""},
+        {id: "1", title: "First todolist", order: 1, addedDate: ""},
+        {id: "2", title: "Second todolist", order: 2, addedDate: ""},
     ])
 
-    let endState = taskReducer({},action)
+    let endState = taskReducer({}, action)
 
     const keys = Object.keys(endState)
 
@@ -545,7 +444,7 @@ test("correct array of task should belong to exact todolistID", () => {
 
         ]
     }
-    let action = setTasksAC("todolistID1",[
+    let action = setTasksAC("todolistID1", [
         {
             id: "1",
             title: "CSS",
@@ -560,7 +459,7 @@ test("correct array of task should belong to exact todolistID", () => {
         },
     ])
 
-    let endState = taskReducer(startState,action)
+    let endState = taskReducer(startState, action)
 
     expect(endState["todolistID1"][0].title).toBe("CSS")
 

@@ -5,12 +5,11 @@ import thunkMiddleWare from "redux-thunk";
 
 let rootReducer = combineReducers({
     todolists: todolistReducer,
-    tasks : taskReducer
+    tasks: taskReducer
 })
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
-export let store = createStore(rootReducer,applyMiddleware(thunkMiddleWare))
-
+export let store = createStore(rootReducer, applyMiddleware(thunkMiddleWare))
 
 
 //@ts-ignore
