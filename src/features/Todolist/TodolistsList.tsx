@@ -12,12 +12,16 @@ import {
 import React, {useCallback, useEffect} from "react";
 import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC} from "../../state/taskReducer";
 import {TaskStatuses} from "../../API/todolists-api";
-import {Grid, Paper} from "@material-ui/core";
+import {Grid, Paper} from "@mui/material/";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist";
 import {TaskStateType} from "../../app/AppWithRedux";
 
-export const TodolistsList = () => {
+
+type TodolistsListPropsType = {
+    demo? : boolean
+}
+export const TodolistsList  : React.FC<TodolistsListPropsType> = ({demo = false}) => {
 
     const dispatch = useDispatch()
 
@@ -29,6 +33,9 @@ export const TodolistsList = () => {
 
     //FUNCTIONS START
     useEffect(() => {
+        if(demo){
+            return
+        }
         dispatch(fetchTodolistTC())
     }, [dispatch])
 
@@ -81,15 +88,14 @@ export const TodolistsList = () => {
                             <Grid item>
                                 <Paper elevation={2} style={{padding: "10px", marginTop: "10px"}}>
                                     <Todolist
+                                        demo={demo}
+                                        todolist = {todolist}
                                         key={todolist.id}
-                                        todolistID={todolist.id}
-                                        title={todolist.title}
                                         tasks={tasksForTodolist}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
                                         changeTaskStatus={changeTaskStatus}
-                                        filter={todolist.filter}
                                         removeTodolist={removeTodolist}
                                         onChangeTaskTitleHandler={onChangeTaskTitleHandler}
                                         changeTodolistTitle={changeTodolistTitle}/>
